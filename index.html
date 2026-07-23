@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PS 梗百科</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+<h1>
+PS 梗百科
+</h1>
+
+<p>
+经典名场面 · 梗文化数据库
+</p>
+
+
+<div class="search-box">
+
+<input 
+id="search"
+placeholder="搜索梗关键词..."
+>
+
+</div>
+
+
+</header>
+
+
+
+
+
+<section class="dashboard">
+
+
+<div class="stat">
+
+<span>
+📚 收录
+</span>
+
+<strong id="count">
+0
+</strong>
+
+</div>
+
+
+
+<div class="stat">
+
+<span>
+🏆 等级
+</span>
+
+<strong>
+5
+</strong>
+
+</div>
+
+
+</section>
+
+
+
+
+
+<main>
+
+
+<section>
+
+
+<h2>
+🏆 梗评级
+</h2>
+
+
+
+<div class="filter">
+
+
+<button data-level="全部">
+全部
+</button>
+
+
+<button data-level="夯">
+夯
+</button>
+
+
+<button data-level="顶尖">
+顶尖
+</button>
+
+
+<button data-level="人上人">
+人上人
+</button>
+
+
+<button data-level="NPC">
+NPC
+</button>
+
+
+<button data-level="拉完了">
+拉完了
+</button>
+
+
+</div>
+
+
+
+
+<div id="cards" class="cards">
+
+</div>
+
+
+
+</section>
+
+
+</main>
+
+
+
+
+
+
+
+<script src="data.js"></script>
+
+
+
+<script>
+
+
+const cards =
+document.querySelector("#cards");
+
+
+const search =
+document.querySelector("#search");
+
+
+const count =
+document.querySelector("#count");
+
+
+
+let currentLevel="全部";
+
+
+
+
+
+function render(){
+
+
+let keyword =
+search.value.trim();
+
+
+
+let list =
+PS_DATA.filter(item=>{
+
+
+let levelMatch =
+currentLevel==="全部"
+||
+item.level===currentLevel;
+
+
+
+let searchMatch =
+item.name.includes(keyword);
+
+
+
+return levelMatch && searchMatch;
+
+
+});
+
+
+
+
+
+cards.innerHTML="";
+
+
+
+
+list.forEach(item=>{
+
+
+let card =
+document.createElement("div");
+
+
+
+card.className="card";
+
+
+
+
+card.innerHTML=`
+
+
+<div class="tag ${item.level}">
+${item.level}
+</div>
+
+
+
+<h3>
+${item.name}
+</h3>
+
+
+
+<div class="desc">
+点击查看详情
+</div>
+
+
+
+<button>
+查看详情
+</button>
+
+
+
+`;
+
+
+
+
+
+card.onclick=()=>{
+
+
+window.location.href=item.url;
+
+
+};
+
+
+
+
+cards.appendChild(card);
+
+
+
+});
+
+
+
+count.innerHTML =
+PS_DATA.length;
+
+
+
+}
+
+
+
+
+
+document
+.querySelectorAll(".filter button")
+.forEach(btn=>{
+
+
+btn.onclick=()=>{
+
+
+currentLevel =
+btn.dataset.level;
+
+
+render();
+
+
+};
+
+
+});
+
+
+
+
+
+search.oninput =
+render;
+
+
+
+
+render();
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
