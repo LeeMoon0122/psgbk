@@ -41,12 +41,6 @@ url:"details/haihaoba.html"
 },
 
 {
-name:"ps生日",
-level:"夯",
-url:"details/ps-shengri.html"
-},
-
-{
 name:"情景再现",
 level:"夯",
 url:"details/qingjingzaixian.html"
