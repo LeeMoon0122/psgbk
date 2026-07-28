@@ -1,0 +1,39 @@
+stages:
+  - sync
+  - deploy
+
+
+sync:
+  stage: sync
+
+  image:
+    name: alpine/git
+    entrypoint: [""]
+
+  script:
+    - rm -rf psgbk.git
+    - git clone --mirror https://github.com/LeeMoon0122/psgbk.git
+    - cd psgbk.git
+    - git push --mirror https://oauth2:${GITLAB_TOKEN}@gitlab.com/LeeMoon0122/psgbk.git
+
+    # 触发 Pages 部署
+    - apk add --no-cache curl
+    - curl --request POST \
+      --form token=${TRIGGER_TOKEN} \
+      --form ref=main \
+      https://gitlab.com/api/v4/projects/你的项目ID/trigger/pipeline
+
+
+pages:
+  stage: deploy
+
+  script:
+    - mkdir public
+    - cp -r $(ls -A | grep -v public) public/
+
+  artifacts:
+    paths:
+      - public
+
+  only:
+    - main
