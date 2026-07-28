@@ -1,0 +1,33 @@
+stages:
+  - deploy
+  - sync
+
+
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - cp -r $(ls -A | grep -v public) public/
+
+  artifacts:
+    paths:
+      - public
+
+  only:
+    - main
+
+
+sync:
+  stage: sync
+
+  image:
+    name: alpine/git
+    entrypoint: [""]
+
+  script:
+    - git clone --mirror https://github.com/LeeMoon0122/psgbk.git
+    - cd psgbk.git
+    - git push --mirror https://oauth2:${GITLAB_TOKEN}@gitlab.com/LeeMoon0122/psgbk.git
+
+  only:
+    - schedules
